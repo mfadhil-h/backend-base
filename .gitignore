@@ -1,0 +1,17 @@
+# Go
+bin/
+tmp/
+*.exe
+*.log
+*.out
+
+# Docker
+*.env
+pgdata/
+db_data/
+*.pid
+
+# IDE
+.vscode/
+.idea/
+*.swp
