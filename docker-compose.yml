@@ -1,3 +1,5 @@
+version: "3.9"
+
 services:
   postgres:
     image: postgres:16-alpine
@@ -6,12 +8,6 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
       POSTGRES_DB: app_db
-      TZ: Asia/Jakarta
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
     ports:
       - "5432:5432"
     volumes:
@@ -21,15 +17,11 @@ services:
     image: rabbitmq:3-management
     container_name: backend_rabbitmq
     environment:
-      - TZ=Asia/Jakarta
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
     ports:
       - "5672:5672"
       - "15672:15672"
-    healthcheck:
-      test: ["CMD", "rabbitmq-diagnostics", "check_running"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
 
   api:
     build:
@@ -38,37 +30,11 @@ services:
     container_name: go_backend
     env_file:
       - .env
-    environment:
-      - TZ=Asia/Jakarta
-    depends_on:
-      postgres:
-        condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
     ports:
       - "8080:8080"
-    volumes:
-      - ./.env:/app/.env   # 👈 mounts .env into container so Viper can read it
-  # api-dev:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile.dev
-  #   container_name: go_backend_dev
-  #   env_file:
-  #     - .env
-  #   environment:
-  #     - TZ=Asia/Jakarta
-  #   volumes:
-  #     - .:/app       # 🔥 mount your code (for live reload)
-  #     - go_mod_cache:/go/pkg/mod
-  #   ports:
-  #     - "8080:8080"
-  #   depends_on:
-  #     postgres:
-  #       condition: service_healthy
-  #     rabbitmq:
-  #       condition: service_healthy
+    depends_on:
+      - postgres
+      - rabbitmq
 
 volumes:
-  # go_mod_cache:
   pgdata:

@@ -1,12 +1,10 @@
-# .air.toml
 root = "."
 tmp_dir = "tmp"
-cmd = "cmd"          # 👈 Force Air to use classic CMD shell
 
 [build]
-  cmd = "go build -o tmp\\main.exe ./cmd/app"
-  bin = "tmp\\main.exe"
-  full_bin = "tmp\\main.exe"
+  cmd = "go build -buildvcs=false -o /app/tmp/main /app/cmd/app"
+  bin = "/app/tmp/main"
+  full_bin = "/app/tmp/main"
   include_ext = ["go"]
   exclude_dir = ["vendor", "tmp"]
   delay = 1000

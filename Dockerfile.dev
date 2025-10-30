@@ -1,22 +1,25 @@
 # ─── Dockerfile.dev ───
 FROM golang:1.25-alpine
 
-# Install dependencies
+# Install system deps
 RUN apk add --no-cache git bash tzdata
 
-# Install Air for live reload
+# Fix PATH for Go-installed tools
+ENV PATH="/go/bin:${PATH}"
+
+# Install Air
 RUN go install github.com/air-verse/air@latest
 
 WORKDIR /app
 
-# Copy go.mod and go.sum first
+# Copy Go module files first for caching
 COPY go.mod go.sum ./
 RUN go mod download
 
-# Copy everything
+# Copy the rest of the project
 COPY . .
 
-# Expose port
 EXPOSE 8080
 
+# Start Air using your config
 CMD ["air", "-c", ".air.toml"]

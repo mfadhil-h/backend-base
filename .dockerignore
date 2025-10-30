@@ -1,0 +1,18 @@
+# ─── Ignore host-only files ───────────────
+.git
+.gitignore
+.DS_Store
+.vscode
+.idea
+
+# ─── Ignore build outputs ────────────────
+tmp
+bin
+*.log
+*.out
+
+# ─── Ignore environment & configs ────────
+.env
+docker-compose.yml
+docker-compose.dev.yml
+Dockerfile.dev

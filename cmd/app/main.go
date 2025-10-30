@@ -44,6 +44,9 @@ func main() {
 	}
 
 	go func() {
+		log.Info().Msg("🔥 Live reload test successful - 1")
+		log.Info().Msg("🔥 Live reload test successful - 2")
+		log.Info().Msg("🔥 Air fully working!")
 		log.Info().Msgf("Starting server on port %s", port)
 		if err := e.Start(":" + port); err != nil && err != http.ErrServerClosed {
 			log.Fatal().Err(err).Msg("Shutting down server")
