@@ -7,7 +7,7 @@ up:
 	$(DOCKER_COMPOSE) up --build -d
 
 down:
-	$(DOCKER_COMPOSE) down -v
+	$(DOCKER_COMPOSE) down 
 
 logs:
 	$(DOCKER_COMPOSE) logs -f api
@@ -17,7 +17,7 @@ up-dev:
 	$(DOCKER_COMPOSE) -f $(DEV_COMPOSE) up --build
 
 down-dev:
-	$(DOCKER_COMPOSE) -f $(DEV_COMPOSE) down -v
+	$(DOCKER_COMPOSE) -f $(DEV_COMPOSE) down 
 
 logs-dev:
 	$(DOCKER_COMPOSE) -f $(DEV_COMPOSE) logs -f api-dev

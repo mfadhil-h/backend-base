@@ -10,6 +10,7 @@ import (
 	"backend-base/internal/database"
 	"backend-base/internal/queue"
 	"backend-base/internal/router"
+	"backend-base/internal/util"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -28,7 +29,14 @@ func main() {
 		log.Fatal().Msgf("Error loading config: %v", err)
 	}
 
-	db := database.InitPostgres()
+	if err := util.LoadKeys(); err != nil {
+		log.Fatal().Err(err).Msg("Failed to load RSA keys")
+	}
+
+	db, errDB := database.InitPostgres()
+	if errDB != nil {
+		panic("failed to connect database: " + errDB.Error())
+	}
 	rmq := queue.InitRabbitMQ()
 	defer rmq.Close()
 
@@ -44,8 +52,7 @@ func main() {
 	}
 
 	go func() {
-		log.Info().Msg("🔥 Live reload test successful - 1")
-		log.Info().Msg("🔥 Live reload test successful - 2")
+		log.Info().Msg("🔥 Live reload test successful")
 		log.Info().Msg("🔥 Air fully working!")
 		log.Info().Msgf("Starting server on port %s", port)
 		if err := e.Start(":" + port); err != nil && err != http.ErrServerClosed {

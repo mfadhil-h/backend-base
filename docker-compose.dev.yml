@@ -46,6 +46,7 @@ services:
     volumes:
       - .:/app
       - go_mod_cache:/go/pkg/mod
+      - ./keys:/app/keys:ro   # 👈 mount keys read-only
       - tmp_data:/app/tmp     # ✅ Add this line (keeps tmp inside container)
     ports:
       - "8080:8080"

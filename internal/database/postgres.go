@@ -1,6 +1,7 @@
 package database
 
 import (
+	"backend-base/internal/model"
 	"fmt"
 
 	"github.com/spf13/viper"
@@ -8,7 +9,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func InitPostgres() *gorm.DB {
+func InitPostgres() (*gorm.DB, error) {
 	dsn := fmt.Sprintf(
 		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
 		viper.GetString("DB_HOST"),
@@ -20,7 +21,15 @@ func InitPostgres() *gorm.DB {
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		panic("failed to connect database: " + err.Error())
+		return nil, err
 	}
-	return db
+
+	// ✅ Auto-migrate tables
+	if err := db.AutoMigrate(
+		&model.User{},
+	); err != nil {
+		return nil, err
+	}
+
+	return db, nil
 }
