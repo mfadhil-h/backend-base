@@ -31,3 +31,21 @@ ps:
 
 clean:
 	docker system prune -af --volumes
+
+# ─── Migration Commands ─────────────────────────────
+MIGRATE = migrate -path scripts/migrations -database "postgres://postgres:password@localhost:5432/app_db?sslmode=disable"
+
+migrate-up:
+	$(MIGRATE) up
+
+migrate-down:
+	$(MIGRATE) down
+
+migrate-force:
+	$(MIGRATE) force 1
+
+migrate-version:
+	$(MIGRATE) version
+
+seed:
+	go run scripts/seed/main.go
