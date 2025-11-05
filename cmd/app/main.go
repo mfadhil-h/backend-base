@@ -52,20 +52,31 @@ func main() {
 	go func() {
 		log.Info().Msg("🔥 Live reload test successful")
 		log.Info().Msg("🔥 Air fully working!")
-		log.Info().Msgf("Starting server on port %s", port)
+		log.Info().Msgf("🚀 Starting server on port %s...", port)
 		if err := e.Start(":" + port); err != nil && err != http.ErrServerClosed {
-			log.Fatal().Err(err).Msg("Shutting down server")
+			log.Fatal().Err(err).Msg("❌ Failed to start server")
 		}
 	}()
 
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, os.Interrupt)
 	<-quit
+	log.Warn().Msg("🛑 Shutdown signal received, cleaning up...")
 
-	log.Info().Msg("Gracefully shutting down...")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	if err := e.Shutdown(ctx); err != nil {
-		log.Fatal().Err(err).Msg("Server forced to shutdown")
+		log.Error().Err(err).Msg("❌ Error during Echo shutdown")
+	} else {
+		log.Info().Msg("✅ Echo server stopped gracefully")
 	}
+
+	// Add other cleanup tasks (DB, cache, etc.)
+	sqlDB, err := db.DB()
+	if err == nil {
+		sqlDB.Close()
+		log.Info().Msg("✅ Database connection closed")
+	}
+
+	log.Info().Msg("👋 Server shutdown complete.")
 }
