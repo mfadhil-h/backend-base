@@ -7,6 +7,7 @@ import (
 	"os/signal"
 	"time"
 
+	"backend-base/internal/config"
 	"backend-base/internal/database"
 	"backend-base/internal/queue"
 	"backend-base/internal/router"
@@ -24,10 +25,7 @@ func main() {
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 
 	// Load config
-	viper.SetConfigFile(".env")
-	if err := viper.ReadInConfig(); err != nil {
-		log.Fatal().Msgf("Error loading config: %v", err)
-	}
+	config.Load()
 
 	if err := util.LoadKeys(); err != nil {
 		log.Fatal().Err(err).Msg("Failed to load RSA keys")

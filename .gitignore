@@ -1,34 +1,18 @@
-# ─── Go build ──────────────────────────────
+# Go
 bin/
 tmp/
 *.exe
 *.out
-*.log
-*.test
-*.swp
 
-# ─── Modules & Vendor ──────────────────────
-vendor/
-go.work
-go.work.sum
-
-# ─── Docker & Compose ──────────────────────
-*.env
+# Docker
 pgdata/
-db_data/
-.tmp/
+tmp_data/
+*.env
 docker-compose.override.yml
 
-# ─── IDE & OS ──────────────────────────────
+# IDE
 .vscode/
 .idea/
-.DS_Store
-Thumbs.db
 
-# ─── Node or Web (if added later) ──────────
-node_modules/
-dist/
-build/
-
-# RSA keys
+# Keys
 keys/*.pem
